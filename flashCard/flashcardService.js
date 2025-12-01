@@ -1,59 +1,46 @@
 import {
-    baralhos,
-    flashcards,
-    proximoIdFlashcard,
-    setProximoIdFlashcard
-  } from "./data.js";
+    getFlashcards,
+    getNextFlashcardId
+  } from "./database.js";
   
-  export function criarFlashcard(pergunta, resposta, idBaralho) {
-    const existe = baralhos.find(b => b.id === idBaralho);
-    if (!existe) return null;
-  
+  export function criarFlashcard({ pergunta, resposta, idBaralho }) {
+    const flashcards = getFlashcards();
     const novo = {
-      id: proximoIdFlashcard,
+      id: getNextFlashcardId(),
       pergunta,
       resposta,
       idBaralho
     };
-  
     flashcards.push(novo);
-    setProximoIdFlashcard(proximoIdFlashcard + 1);
-  
     return novo;
   }
   
   export function listarFlashcards() {
-    return flashcards;
+    return getFlashcards();
   }
   
-  export function listarFlashcardsPorBaralho(idBaralho) {
-    return flashcards.filter(f => f.idBaralho === idBaralho);
+  export function listarFlashcardsPorBaralho({ idBaralho }) {
+    return getFlashcards().filter(f => f.idBaralho === idBaralho);
   }
   
-  export function atualizarFlashcard(id, pergunta, resposta, idBaralho) {
-    const card = flashcards.find(f => f.id === id);
-    if (!card) return null;
+  export function atualizarFlashcard({ id, pergunta, resposta, idBaralho }) {
+    const flashcards = getFlashcards();
+    const flash = flashcards.find(f => f.id === id);
+    if (!flash) return null;
   
-    const existe = baralhos.find(b => b.id === idBaralho);
-    if (!existe) return null;
-  
-    card.pergunta = pergunta;
-    card.resposta = resposta;
-    card.idBaralho = idBaralho;
-  
-    return card;
+    flash.pergunta = pergunta;
+    flash.resposta = resposta;
+    flash.idBaralho = idBaralho;
+    return flash;
   }
   
-  export function removerFlashcard(id) {
+  export function removerFlashcard({ id }) {
+    const flashcards = getFlashcards();
     const index = flashcards.findIndex(f => f.id === id);
     if (index !== -1) flashcards.splice(index, 1);
   }
   
-  export function buscarPorPergunta(pergunta) {
-    return flashcards.filter(f => f.pergunta === pergunta);
-  }
-  
-  export function buscarPorBaralho(idBaralho) {
-    return flashcards.filter(f => f.idBaralho === idBaralho);
+  export function buscarPorPergunta({ pergunta }) {
+    return getFlashcards().filter(f => f.pergunta === pergunta);
   }
   

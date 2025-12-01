@@ -1,38 +1,45 @@
 import {
-    baralhos,
-    flashcards,
-    proximoIdBaralho,
-    setProximoIdBaralho,
-    setBaralhos,
-    setFlashcards
-  } from "./data.js";
+    getBaralhos,
+    getFlashcards,
+    getNextBaralhoId
+  } from "./database.js";
   
-  export function criarBaralho(titulo) {
+  // CREATE
+  export function criarBaralho({ titulo }) {
+    const baralhos = getBaralhos();
     const novo = {
-      id: proximoIdBaralho,
+      id: getNextBaralhoId(),
       titulo
     };
-  
     baralhos.push(novo);
-    setProximoIdBaralho(proximoIdBaralho + 1);
-  
     return novo;
   }
   
+  // READ
   export function listarBaralhos() {
-    return baralhos;
+    return getBaralhos();
   }
   
-  export function atualizarBaralho(id, novoTitulo) {
+  // UPDATE
+  export function atualizarBaralho({ id, titulo }) {
+    const baralhos = getBaralhos();
     const baralho = baralhos.find(b => b.id === id);
     if (!baralho) return null;
   
-    baralho.titulo = novoTitulo;
+    baralho.titulo = titulo;
     return baralho;
   }
   
-  export function removerBaralho(id) {
-    setBaralhos(baralhos.filter(b => b.id !== id));
-    setFlashcards(flashcards.filter(f => f.idBaralho !== id));
+  // DELETE
+  export function removerBaralho({ id }) {
+    const baralhos = getBaralhos();
+    const flashcards = getFlashcards();
+  
+    const index = baralhos.findIndex(b => b.id === id);
+    if (index !== -1) baralhos.splice(index, 1);
+  
+    for (let i = flashcards.length - 1; i >= 0; i--) {
+      if (flashcards[i].idBaralho === id) flashcards.splice(i, 1);
+    }
   }
   
