@@ -52,7 +52,7 @@ function menu() {
   });
 }
 
-// ------------------- MENU FUNÇÕES -------------------
+// ------------------- MENU FUNÇÕES test n26 -------------------
 
 function criarBaralhoMenu() {
   rl.question("Título: ", titulo => {
