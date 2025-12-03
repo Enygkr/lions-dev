@@ -4,7 +4,7 @@ import {
     getNextBaralhoId
   } from "./database.js";
   
-  // CREATE
+  // CREATE 9
   export function criarBaralho({ titulo }) {
     const baralhos = getBaralhos();
     const novo = {
@@ -15,12 +15,12 @@ import {
     return novo;
   }
   
-  // READ
+  // READ 3
   export function listarBaralhos() {
     return getBaralhos();
   }
   
-  // UPDATE
+  // UPDATE 65
   export function atualizarBaralho({ id, titulo }) {
     const baralhos = getBaralhos();
     const baralho = baralhos.find(b => b.id === id);
@@ -30,7 +30,7 @@ import {
     return baralho;
   }
   
-  // DELETE
+  // DELETE 12
   export function removerBaralho({ id }) {
     const baralhos = getBaralhos();
     const flashcards = getFlashcards();
