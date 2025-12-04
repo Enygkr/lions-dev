@@ -6,24 +6,48 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
+// CORES
+const C = {
+  reset: "\x1b[0m",
+  bold: "\x1b[1m",
+  cyan: "\x1b[36m",
+  green: "\x1b[32m",
+  yellow: "\x1b[33m",
+  red: "\x1b[31m",
+  magenta: "\x1b[35m",
+  blue: "\x1b[34m",
+};
+
 function clear() {
   console.clear();
 }
 
+function banner() {
+  console.log(
+    C.cyan + C.bold +
+`╔══════════════════════════════════════════════════╗
+║           SISTEMA DE GERENCIAMENTO DE LIVROS     ║
+╚══════════════════════════════════════════════════╝` +
+    C.reset
+  );
+}
+
 function menuPrincipal() {
   clear();
-  console.log(`
-===============================
-     GERENCIAMENTO DE LIVROS
-===============================
+  banner();
 
-1. Criar Livro
-2. Listar Livros
-3. Atualizar Livro
-4. Remover Livro
-5. Buscar Livros
-6. Sair
-`);
+  console.log(
+    C.green +
+`
+  1. Criar Livro
+  2. Listar Livros
+  3. Atualizar Livro
+  4. Remover Livro
+  5. Buscar Livros
+  6. Sair
+` +
+    C.reset
+  );
 
   rl.question("Escolha uma opção: ", (op) => {
     switch (op) {
@@ -32,15 +56,18 @@ function menuPrincipal() {
       case "3": atualizarLivro(); break;
       case "4": removerLivro(); break;
       case "5": buscarLivros(); break;
-      case "6": rl.close(); break;
+      case "6": sair(); break;
       default:
-        console.log("Opção inválida.");
+        console.log(C.red + "Opção inválida." + C.reset);
         voltar(menuPrincipal);
     }
   });
 }
 
 function criarLivro() {
+  clear();
+  banner();
+
   rl.question("Título: ", (title) => {
     rl.question("Autor: ", (author) => {
       rl.question("Ano: ", (year) => {
@@ -54,11 +81,16 @@ function criarLivro() {
 }
 
 function listarLivros() {
+  clear();
+  banner();
   books.listarLivros();
   voltar(menuPrincipal);
 }
 
 function atualizarLivro() {
+  clear();
+  banner();
+
   rl.question("ID do livro: ", (id) => {
     rl.question("Novo título: ", (title) => {
       rl.question("Novo autor: ", (author) => {
@@ -74,6 +106,9 @@ function atualizarLivro() {
 }
 
 function removerLivro() {
+  clear();
+  banner();
+
   rl.question("ID do livro a remover: ", (id) => {
     books.removerLivro(Number(id));
     voltar(menuPrincipal);
@@ -81,10 +116,15 @@ function removerLivro() {
 }
 
 function buscarLivros() {
-  rl.question("Título (vazio para ignorar): ", (title) => {
-    rl.question("Autor (vazio para ignorar): ", (author) => {
-      rl.question("Ano (vazio para ignorar): ", (year) => {
-        rl.question("Gênero (vazio para ignorar): ", (genre) => {
+  clear();
+  banner();
+
+  console.log(C.yellow + "Deixe em branco para ignorar o filtro.\n" + C.reset);
+
+  rl.question("Título: ", (title) => {
+    rl.question("Autor: ", (author) => {
+      rl.question("Ano: ", (year) => {
+        rl.question("Gênero: ", (genre) => {
           books.buscarLivros({
             title,
             author,
@@ -99,8 +139,14 @@ function buscarLivros() {
 }
 
 function voltar(fn) {
-  console.log("\nPressione ENTER para continuar...");
+  console.log(C.magenta + "\nPressione ENTER para continuar..." + C.reset);
   rl.question("", fn);
+}
+
+function sair() {
+  clear();
+  console.log(C.blue + C.bold + "Encerrando o sistema..." + C.reset);
+  rl.close();
 }
 
 module.exports = { menuPrincipal };
