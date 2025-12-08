@@ -1,9 +1,16 @@
 [
   {
-    "id": 1,
-    "title": "tzao",
-    "author": "eu",
+    "id": 5,
+    "title": "A volta dos que não foram",
+    "author": "roberto",
     "year": 1945,
-    "genre": "sexo"
+    "genre": "ação"
+  },
+  {
+    "id": 6,
+    "title": "a morte dos que vivem",
+    "author": "eu memo",
+    "year": 1936,
+    "genre": "morte"
   }
 ]
