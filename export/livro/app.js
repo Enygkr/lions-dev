@@ -9,10 +9,10 @@ app.use(express.json());
 // rotas web
 app.use("/", livroRoutes);
 
-// iniciar o servidor web
-app.listen(4001, () => {
-    console.log("Servidor rodando: http://localhost:4001");
+// iniciar servidor web
+app.listen(4003, () => {
+    console.log("Servidor rodando: http://localhost:4003");
   });  
 
-// iniciar o menu do terminal
+// iniciar menu do terminal
 mostrarMenu();

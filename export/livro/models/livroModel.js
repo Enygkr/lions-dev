@@ -1,26 +1,48 @@
-// Banco de dados em memória
-export let livros = [];
-
-export function adicionarLivro(titulo, autor, ano) {
-  livros.push({ id: Date.now(), titulo, autor, ano });
-}
+let livros = [];
+let idAtual = 1;
 
 export function listarLivros() {
   return livros;
 }
 
-export function atualizarLivro(id, novosDados) {
-  const index = livros.findIndex(l => l.id === id);
-  if (index === -1) return false;
+export function adicionarLivro(titulo, autor, ano, genero) {
+  const novo = {
+    id: idAtual++,
+    titulo,
+    autor,
+    ano: Number(ano),
+    genero
+  };
+  livros.push(novo);
+  return novo;
+}
 
-  livros[index] = { ...livros[index], ...novosDados };
-  return true;
+export function atualizarLivro(id, dados) {
+  id = Number(id);
+  const index = livros.findIndex(l => l.id === id);
+  if (index === -1) return null;
+
+  livros[index] = { ...livros[index], ...dados };
+  return livros[index];
 }
 
 export function removerLivro(id) {
+  id = Number(id);
   const index = livros.findIndex(l => l.id === id);
   if (index === -1) return false;
 
   livros.splice(index, 1);
   return true;
+}
+
+// >>> ESTA FUNÇÃO FALTAVA <<<
+export function buscarLivros({ titulo, autor, ano, genero }) {
+  return livros.filter(l => {
+    return (
+      (!titulo || l.titulo.toLowerCase().includes(titulo.toLowerCase())) &&
+      (!autor || l.autor.toLowerCase().includes(autor.toLowerCase())) &&
+      (!ano || l.ano === Number(ano)) &&
+      (!genero || l.genero.toLowerCase().includes(genero.toLowerCase()))
+    );
+  });
 }
