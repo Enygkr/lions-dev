@@ -1,44 +1,41 @@
 import express from "express";
-import {
-  listarLivros,
-  adicionarLivro,
-  atualizarLivro,
-  deletarLivro,
-  buscarLivros
-} from "../models/livroModel.js";
+import { listarLivros } from "../models/livroModel.js";
 
 const router = express.Router();
 
-// LISTAR
 router.get("/", (req, res) => {
-  res.json(listarLivros());
-});
+  const livros = listarLivros();
+  let html = `
+    <h1>Lista de Livros</h1>
+    <a href="/novo">Adicionar Livro</a>
+    <ul>
+  `;
+  for (const l of livros) {
+    html += `<li>${l.titulo} - ${l.autor} (${l.ano})</li>`;
+  }
+  html += "</ul>";
 
-// CRIAR
-router.post("/", (req, res) => {
-  const { titulo, autor, ano, genero } = req.body;
-  const novo = adicionarLivro(titulo, autor, ano, genero);
-  res.status(201).json(novo);
-});
-
-// ATUALIZAR
-router.put("/:id", (req, res) => {
-  const atualizado = atualizarLivro(req.params.id, req.body);
-  if (!atualizado) return res.status(404).json({ erro: "Livro não encontrado" });
-  res.json(atualizado);
-});
-
-// DELETAR
-router.delete("/:id", (req, res) => {
-  const ok = deletarLivro(req.params.id);
-  if (!ok) return res.status(404).json({ erro: "Livro não encontrado" });
-  res.json({ mensagem: "Livro removido" });
-});
-
-// BUSCAR
-router.get("/busca/query", (req, res) => {
-  const resultados = buscarLivros(req.query);
-  res.json(resultados);
+  res.send(html);
 });
 
 export default router;
+
+import { adicionarLivro } from "../models/livroModel.js";
+
+router.get("/novo", (req, res) => {
+  res.send(`
+    <h1>Novo Livro</h1>
+    <form method="POST" action="/create">
+      <input name="titulo" placeholder="Título" required><br>
+      <input name="autor" placeholder="Autor" required><br>
+      <input name="ano" type="number" placeholder="Ano" required><br>
+      <button type="submit">Salvar</button>
+    </form>
+  `);
+});
+
+router.post("/create", (req, res) => {
+  const { titulo, autor, ano } = req.body;
+  adicionarLivro(titulo, autor, ano);
+  res.redirect("/");
+});
