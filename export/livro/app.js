@@ -1,18 +1,11 @@
 import express from "express";
-import { mostrarMenu } from "./views/menu.js";
 import livroRoutes from "./routes/livroRoutes.js";
 
 const app = express();
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// rotas web
-app.use("/", livroRoutes);
+app.use("/livros", livroRoutes);
 
-// iniciar servidor web
-app.listen(4008, () => {
-    console.log("Servidor rodando: http://localhost:4008");
-  });  
-
-// iniciar menu do terminal
-mostrarMenu();
+app.listen(4010, () => {
+  console.log("Servidor rodando http://localhost:4010");
+});

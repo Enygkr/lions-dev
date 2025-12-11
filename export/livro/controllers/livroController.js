@@ -1,45 +1,52 @@
 import {
-    adicionarLivro,
-    listarLivros,
-    atualizarLivro,
-    removerLivro
-  } from "../models/livroModel.js";
-  
-  export function criar(titulo, autor, ano) {
-    adicionarLivro(titulo, autor, ano);
-    console.log("\nLivro adicionado com sucesso.\n");
+  adicionarLivro,
+  listarLivros,
+  atualizarLivro,
+  removerLivro,
+  buscarLivros
+} from "../models/livroModel.js";
+
+export function criarLivro(req, res) {
+  const { titulo, autor, ano, genero } = req.body;
+
+  if (!titulo || !autor || !ano || !genero) {
+    return res.status(400).json({ erro: "Preencha todos os campos." });
   }
-  
-  export function listar() {
-    const livros = listarLivros();
-  
-    if (livros.length === 0) {
-      console.log("\nNenhum livro cadastrado.\n");
-      return;
-    }
-  
-    console.table(livros);
+
+  const novo = adicionarLivro(titulo, autor, ano, genero);
+  res.status(201).json(novo);
+}
+
+export function lerLivros(req, res) {
+  res.json(listarLivros());
+}
+
+export function atualizarLivroController(req, res) {
+  const { id } = req.params;
+  const { titulo, autor, ano, genero } = req.body;
+
+  const livroAtualizado = atualizarLivro(id, { titulo, autor, ano, genero });
+
+  if (!livroAtualizado) {
+    return res.status(404).json({ erro: "Livro não encontrado." });
   }
-  
-  export function atualizar(id, titulo, autor, ano) {
-    const ok = atualizarLivro(id, { titulo, autor, ano });
-  
-    if (!ok) {
-      console.log("\nID não encontrado.\n");
-      return;
-    }
-  
-    console.log("\nLivro atualizado.\n");
+
+  res.json(livroAtualizado);
+}
+
+export function removerLivroController(req, res) {
+  const { id } = req.params;
+
+  const ok = removerLivro(id);
+
+  if (!ok) {
+    return res.status(404).json({ erro: "Livro não encontrado." });
   }
-  
-  export function remover(id) {
-    const ok = removerLivro(id);
-  
-    if (!ok) {
-      console.log("\nID não encontrado.\n");
-      return;
-    }
-  
-    console.log("\nLivro removido.\n");
-  }
-  
+
+  res.json({ mensagem: "Livro removido com sucesso." });
+}
+
+export function buscarLivrosController(req, res) {
+  const resultados = buscarLivros(req.query);
+  res.json(resultados);
+}
