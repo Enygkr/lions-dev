@@ -9,3 +9,12 @@ app.use("/livros", livroRoutes);
 app.listen(4010, () => {
   console.log("Servidor rodando http://localhost:4010");
 });
+
+
+
+// {
+//   "titulo": "O Hobbit",
+//   "autor": "J.R.R. Tolkien",
+//   "ano": 1937,
+//   "genero": "Fantasia"
+// }
